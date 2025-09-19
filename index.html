@@ -5,69 +5,57 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Trail — Coming Soon</title>
   <style>
-    /* Reset & base */
+    /* Base Reset */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
-    body {
-      font-family: "Segoe UI", Roboto, sans-serif;
-      background: linear-gradient(135deg, #141e30, #243b55);
-      color: #fff;
+    html, body {
+      height: 100%;
+      font-family: "Inter", "Segoe UI", sans-serif;
+      background: #0d0d0d;
+      color: #ffffff;
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 100vh;
       text-align: center;
+    }
+
+    .wrapper {
+      max-width: 700px;
       padding: 2rem;
     }
 
-    .container {
-      max-width: 600px;
-      background: rgba(255, 255, 255, 0.05);
-      padding: 3rem 2rem;
-      border-radius: 1.5rem;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(10px);
-    }
-
     h1 {
-      font-size: 2.8rem;
-      margin-bottom: 1rem;
-      letter-spacing: 1px;
+      font-size: 4rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      letter-spacing: -1px;
     }
 
     p {
-      font-size: 1.2rem;
-      color: #d0d0d0;
-      margin-bottom: 2rem;
+      font-size: 1.25rem;
+      color: #b5b5b5;
     }
 
-    .footer {
-      font-size: 0.9rem;
-      color: #999;
-      margin-top: 2rem;
-    }
-
-    .logo {
-      display: inline-block;
-      font-size: 2.5rem;
-      font-weight: bold;
-      background: linear-gradient(45deg, #ffb347, #ffcc33);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 1rem;
+    .brand {
+      display: block;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #ffcc33;
+      margin-bottom: 1.5rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="logo">Trail</div>
+  <div class="wrapper">
+    <span class="brand">TRAIL</span>
     <h1>Coming Soon</h1>
-    <p>We’re crafting something powerful for creators. Stay tuned.</p>
-    <div class="footer">© 2025 Trail</div>
+    <p>We’re building a new way to create. Stay tuned.</p>
   </div>
 </body>
 </html>
