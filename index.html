@@ -295,7 +295,7 @@
 
   <nav>
     <div class="logo">Trail</div>
-    <div class="beta-tag">Beta 0.4.4</div>
+    <div class="beta-tag" id="beta-tag">Beta 0.4.4</div>
   </nav>
 
   <main>
@@ -307,21 +307,21 @@
       <div class="download-row">
 
         <!-- Windows download -->
-        <a href="https://github.com/Ayintoya/Trail/releases/download/v0.4.4/Trail-Setup-0.4.4.exe" class="btn btn-win">
+        <a id="win-download" href="https://github.com/Ayintoya/Trail/releases/download/v0.4.4/Trail-Setup-0.4.4.exe" class="btn btn-win">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
             <path d="M3 5.558L10.701 4.5v7.365H3V5.558zm0 12.884L10.701 19.5V12.22H3v6.222zm8.56 1.196L21 21V12.22h-9.44v7.418zm0-14.276v7.277H21V3L11.56 5.362z"/>
           </svg>
           Download for Windows
-          <span class="btn-ext">.exe</span>
+          <span class="btn-ext" id="win-ext">.exe</span>
         </a>
 
         <!-- Linux Debian download -->
-        <a href="https://github.com/Ayintoya/Trail/releases/download/v0.4.4/Trail_0.4.4_amd64.deb" class="btn btn-lin">
+        <a id="lin-download" href="https://github.com/Ayintoya/Trail/releases/download/v0.4.4/Trail_0.4.4_amd64.deb" class="btn btn-lin">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/>
           </svg>
           Download for Linux
-          <span class="btn-ext">.deb</span>
+          <span class="btn-ext" id="lin-ext">.deb</span>
         </a>
 
         <!-- macOS download -->
@@ -334,7 +334,7 @@
         </button>
 
       </div>
-      <p class="release-info">v0.4.4 Beta · Free · Windows &amp; Linux available now</p>
+      <p class="release-info" id="release-info">v0.4.4 Beta · Free · Windows &amp; Linux available now</p>
     </section>
 
     <!-- screenshot wrapper with correct tag closing hierarchy -->
@@ -353,6 +353,58 @@
     <p class="footer-text">Beta — bugs expected, feedback appreciated</p>
     <p class="footer-text">© 2026 Trail</p>
   </footer>
+
+  <script>
+    const REPO = 'Ayintoya/Trail';
+    const CACHE_KEY = 'trail_latest_release_cache';
+    const CACHE_TTL_MS = 60 * 60 * 1000;
+
+    function applyRelease(data) {
+      const version = (data.tag_name || '').replace(/^v/, '');
+      const exeAsset = (data.assets || []).find(a => a.name.toLowerCase().endsWith('.exe'));
+      const debAsset = (data.assets || []).find(a => a.name.toLowerCase().endsWith('.deb'));
+
+      if (version) {
+        document.getElementById('beta-tag').textContent = `Beta ${version}`;
+        document.getElementById('release-info').textContent = `v${version} Beta · Free · Windows & Linux available now`;
+      }
+      if (exeAsset) {
+        document.getElementById('win-download').href = exeAsset.browser_download_url;
+        document.getElementById('win-ext').textContent = '.' + exeAsset.name.split('.').pop();
+      }
+      if (debAsset) {
+        document.getElementById('lin-download').href = debAsset.browser_download_url;
+        document.getElementById('lin-ext').textContent = '.' + debAsset.name.split('.').pop();
+      }
+    }
+
+    async function loadLatestRelease() {
+      let cached = null;
+      try {
+        const raw = localStorage.getItem(CACHE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Date.now() - parsed.fetchedAt < CACHE_TTL_MS) cached = parsed.data;
+        }
+      } catch {}
+
+      if (cached) {
+        applyRelease(cached);
+        return;
+      }
+
+      const res = await fetch(`https://api.github.com/repos/${REPO}/releases/latest`, {
+        headers: { Accept: 'application/vnd.github+json' }
+      });
+      const data = await res.json();
+      applyRelease(data);
+      try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify({ fetchedAt: Date.now(), data }));
+      } catch {}
+    }
+
+    loadLatestRelease();
+  </script>
 
 </body>
 </html>
